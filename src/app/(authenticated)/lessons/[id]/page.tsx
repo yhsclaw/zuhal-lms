@@ -52,12 +52,13 @@ export default function LessonDetailPage() {
         title={`Lesson — ${lesson.student.name}`}
         description={`${formatDate(lesson.schedule.date)} at ${lesson.startTime}`}
         actions={
-          <Button variant="outline" asChild>
-            <Link href={`/schedule/${lesson.scheduleId}`}>
-              <ArrowLeft className="mr-1 h-4 w-4" />
-              Back to Schedule
-            </Link>
-          </Button>
+          <Link
+            href={`/schedule/${lesson.scheduleId}`}
+            className="inline-flex items-center gap-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium hover:bg-gray-50"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Schedule
+          </Link>
         }
       />
 
