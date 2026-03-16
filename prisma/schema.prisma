@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lessons   Lesson[]
+
+  @@map("students")
+}
+
+model Schedule {
+  id          String   @id @default(cuid())
+  date        DateTime @db.Date
+  teacherName String
+  classroom   String
+  photoUrl    String?
+  rawOcrText  String?
+  createdAt   DateTime @default(now())
+  lessons     Lesson[]
+
+  @@map("schedules")
+}
+
+model Lesson {
+  id            String          @id @default(cuid())
+  scheduleId    String
+  studentId     String
+  startTime     String          // "HH:mm"
+  durationMin   Int?            // 45 or 25
+  isTrial       Boolean         @default(false)
+  attendance    Attendance      @default(PENDING)
+  homeworkNotes String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  schedule      Schedule        @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  student       Student         @relation(fields: [studentId], references: [id])
+  chapters      LessonChapter[]
+  pdfs          LessonPdf[]
+
+  @@map("lessons")
+}
+
+enum Attendance {
+  PENDING
+  PRESENT
+  ABSENT
+}
+
+model Chapter {
+  number      Int             @id
+  title       String
+  description String?
+  lessons     LessonChapter[]
+
+  @@map("chapters")
+}
+
+model LessonChapter {
+  id            String  @id @default(cuid())
+  lessonId      String
+  chapterNumber Int
+  notes         String?
+
+  lesson        Lesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  chapter       Chapter @relation(fields: [chapterNumber], references: [number])
+
+  @@unique([lessonId, chapterNumber])
+  @@map("lesson_chapters")
+}
+
+model PdfExercise {
+  id        String      @id @default(cuid())
+  title     String
+  fileName  String
+  filePath  String
+  createdAt DateTime    @default(now())
+  lessons   LessonPdf[]
+
+  @@map("pdf_exercises")
+}
+
+model LessonPdf {
+  id       String      @id @default(cuid())
+  lessonId String
+  pdfId    String
+
+  lesson   Lesson      @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  pdf      PdfExercise @relation(fields: [pdfId], references: [id])
+
+  @@unique([lessonId, pdfId])
+  @@map("lesson_pdfs")
+}
