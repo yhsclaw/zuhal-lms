@@ -58,12 +58,10 @@ export const scheduleRouter = router({
     }),
 
   getByDate: protectedProcedure
-    .input(z.object({ date: z.date() }))
+    .input(z.object({ date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/) }))
     .query(async ({ ctx, input }) => {
-      const startOfDay = new Date(input.date);
-      startOfDay.setHours(0, 0, 0, 0);
-      const endOfDay = new Date(input.date);
-      endOfDay.setHours(23, 59, 59, 999);
+      const startOfDay = new Date(input.date + "T00:00:00.000Z");
+      const endOfDay = new Date(input.date + "T23:59:59.999Z");
 
       return ctx.prisma.schedule.findFirst({
         where: { date: { gte: startOfDay, lte: endOfDay } },
@@ -79,7 +77,7 @@ export const scheduleRouter = router({
   import: protectedProcedure
     .input(
       z.object({
-        date: z.date(),
+        date: z.union([z.date(), z.string().regex(/^\d{4}-\d{2}-\d{2}$/)]).transform(v => typeof v === 'string' ? new Date(v + "T00:00:00.000Z") : v),
         teacherName: z.string().min(1),
         classroom: z.string().min(1),
         photoUrl: z.string().optional(),
