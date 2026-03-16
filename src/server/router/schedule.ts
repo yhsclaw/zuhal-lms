@@ -57,6 +57,25 @@ export const scheduleRouter = router({
       return schedule;
     }),
 
+  getByDate: protectedProcedure
+    .input(z.object({ date: z.date() }))
+    .query(async ({ ctx, input }) => {
+      const startOfDay = new Date(input.date);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(input.date);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      return ctx.prisma.schedule.findFirst({
+        where: { date: { gte: startOfDay, lte: endOfDay } },
+        include: {
+          lessons: {
+            include: { student: true },
+            orderBy: { startTime: "asc" },
+          },
+        },
+      });
+    }),
+
   import: protectedProcedure
     .input(
       z.object({
