@@ -6,6 +6,7 @@ import { trpc } from "@/lib/trpc";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { LessonForm } from "@/components/lesson/LessonForm";
 import { PdfAttacher } from "@/components/lesson/PdfAttacher";
+import { PracticesDone } from "@/components/lesson/PracticesDone";
 import { AttendanceToggle } from "@/components/schedule/AttendanceToggle";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -43,6 +44,8 @@ export default function LessonDetailPage() {
     return <div className="text-center text-gray-500">Lesson not found.</div>;
   }
 
+  const isAbsent = lesson.attendance === "ABSENT";
+
   return (
     <div>
       <PageHeader
@@ -57,6 +60,27 @@ export default function LessonDetailPage() {
           </Button>
         }
       />
+
+      {/* Absent Toggle */}
+      <div className="mb-6">
+        <label className="flex items-center gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={isAbsent}
+            onChange={() =>
+              setAttendance.mutate({
+                id: lesson.id,
+                attendance: isAbsent ? "PENDING" : "ABSENT",
+              })
+            }
+            className="h-5 w-5 rounded border-gray-300 text-red-600 focus:ring-red-500"
+          />
+          <span className="text-sm font-medium text-gray-700">Mark as Absent</span>
+          {isAbsent && (
+            <Badge variant="destructive">Absent</Badge>
+          )}
+        </label>
+      </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
@@ -124,11 +148,30 @@ export default function LessonDetailPage() {
             </CardContent>
           </Card>
 
-          <LessonForm
-            lessonId={lesson.id}
-            currentChapters={lesson.chapters}
-            homeworkNotes={lesson.homeworkNotes}
-          />
+          {/* Practices Done This Lesson — hidden when absent */}
+          {isAbsent ? (
+            <Card className="opacity-50">
+              <CardContent className="flex items-center justify-center py-8">
+                <p className="text-sm text-gray-500">
+                  No practices to log — student was absent.
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            <PracticesDone
+              lessonId={lesson.id}
+              currentChapters={lesson.chapters}
+              practiceNotes={(lesson as unknown as { practiceNotes: string | null }).practiceNotes}
+            />
+          )}
+
+          {!isAbsent && (
+            <LessonForm
+              lessonId={lesson.id}
+              currentChapters={lesson.chapters}
+              homeworkNotes={lesson.homeworkNotes}
+            />
+          )}
         </div>
 
         <div>

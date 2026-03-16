@@ -7,7 +7,7 @@ import { EmptyState } from "@/components/shared/EmptyState";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Upload } from "lucide-react";
+import { Calendar, Upload, PenLine } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 export default function ScheduleListPage() {
@@ -19,12 +19,20 @@ export default function ScheduleListPage() {
         title="Schedules"
         description="All imported teaching schedules"
         actions={
-          <Button asChild>
-            <Link href="/schedule/import">
-              <Upload className="mr-2 h-4 w-4" />
-              Import
-            </Link>
-          </Button>
+          <>
+            <Button asChild>
+              <Link href="/schedule/import">
+                <Upload className="mr-2 h-4 w-4" />
+                Import Schedule
+              </Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/schedule/manual">
+                <PenLine className="mr-2 h-4 w-4" />
+                Manual Entry
+              </Link>
+            </Button>
+          </>
         }
       />
 

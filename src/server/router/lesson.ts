@@ -82,6 +82,20 @@ export const lessonRouter = router({
       });
     }),
 
+  updatePracticeNotes: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        practiceNotes: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.lesson.update({
+        where: { id: input.id },
+        data: { practiceNotes: input.practiceNotes },
+      });
+    }),
+
   setChapters: protectedProcedure
     .input(
       z.object({

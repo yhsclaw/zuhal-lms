@@ -8,13 +8,15 @@ datasource db {
 }
 
 model Student {
-  id        String   @id @default(cuid())
-  name      String
-  phone     String?
-  notes     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  lessons   Lesson[]
+  id              String    @id @default(cuid())
+  name            String
+  phone           String?
+  notes           String?
+  firstLessonDate DateTime? @db.Date
+  instrument      String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  lessons         Lesson[]
 
   @@map("students")
 }
@@ -41,6 +43,7 @@ model Lesson {
   isTrial       Boolean         @default(false)
   attendance    Attendance      @default(PENDING)
   homeworkNotes String?
+  practiceNotes String?
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 

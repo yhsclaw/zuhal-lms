@@ -121,6 +121,82 @@ export const scheduleRouter = router({
       });
     }),
 
+  addLesson: protectedProcedure
+    .input(
+      z.object({
+        scheduleId: z.string(),
+        studentName: z.string().min(1),
+        startTime: z.string().regex(/^\d{2}:\d{2}$/),
+        durationMin: z.number().optional(),
+        isTrial: z.boolean().default(false),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      let student = await ctx.prisma.student.findFirst({
+        where: { name: { equals: input.studentName, mode: "insensitive" } },
+      });
+
+      if (!student) {
+        student = await ctx.prisma.student.create({
+          data: { name: input.studentName },
+        });
+      }
+
+      const lesson = await ctx.prisma.lesson.create({
+        data: {
+          scheduleId: input.scheduleId,
+          studentId: student.id,
+          startTime: input.startTime,
+          durationMin: input.durationMin,
+          isTrial: input.isTrial,
+        },
+        include: { student: true },
+      });
+
+      return lesson;
+    }),
+
+  updateLesson: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        startTime: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+        studentName: z.string().min(1).optional(),
+        durationMin: z.number().optional(),
+        isTrial: z.boolean().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, studentName, ...data } = input;
+
+      if (studentName) {
+        let student = await ctx.prisma.student.findFirst({
+          where: { name: { equals: studentName, mode: "insensitive" } },
+        });
+
+        if (!student) {
+          student = await ctx.prisma.student.create({
+            data: { name: studentName },
+          });
+        }
+
+        (data as Record<string, unknown>).studentId = student.id;
+      }
+
+      return ctx.prisma.lesson.update({
+        where: { id },
+        data,
+        include: { student: true },
+      });
+    }),
+
+  deleteLesson: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.lesson.delete({ where: { id: input.id } });
+      return { success: true };
+    }),
+
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {

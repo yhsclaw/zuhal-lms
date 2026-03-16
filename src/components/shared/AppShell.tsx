@@ -14,14 +14,12 @@ import {
   X,
   Home,
   LogOut,
-  Upload,
 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: Home },
   { href: "/schedule", label: "Schedule", icon: Calendar },
-  { href: "/schedule/import", label: "Import", icon: Upload },
   { href: "/students", label: "Students", icon: Users },
   { href: "/library", label: "Library", icon: BookOpen },
   { href: "/reports", label: "Reports", icon: BarChart3 },
