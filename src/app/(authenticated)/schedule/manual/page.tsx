@@ -244,16 +244,17 @@ export default function ScheduleManualEntryPage() {
                   key={lesson.id}
                   className="flex flex-wrap items-center gap-2 rounded-lg border border-blue-300 bg-blue-50 p-3"
                 >
-                  <select
+                  <Input
+                    placeholder="12:34"
                     value={editState.time}
-                    onChange={(e) => setEditState((s) => s && { ...s, time: e.target.value })}
-                    className="h-10 w-24 rounded-md border border-gray-300 bg-white px-2 font-mono text-sm"
-                  >
-                    <option value="">Time</option>
-                    {TIME_OPTIONS.map((t) => (
-                      <option key={t} value={t}>{t}</option>
-                    ))}
-                  </select>
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/\D/g, "").slice(0, 4);
+                      const formatted = raw.length >= 3 ? raw.slice(0, 2) + ":" + raw.slice(2) : raw;
+                      setEditState((s) => s && { ...s, time: formatted });
+                    }}
+                    className="h-10 w-20 font-mono text-sm"
+                    maxLength={5}
+                  />
                   <Input
                     placeholder="Student name"
                     value={editState.student}
@@ -332,16 +333,17 @@ export default function ScheduleManualEntryPage() {
               {/* Time */}
               <div>
                 <Label className="mb-1 block text-xs">Time</Label>
-                <select
+                <Input
+                  placeholder="12:34"
                   value={newLesson.time}
-                  onChange={(e) => setNewLesson((r) => ({ ...r, time: e.target.value }))}
-                  className="h-10 w-24 rounded-md border border-gray-300 bg-white px-2 font-mono text-sm"
-                >
-                  <option value="">--:--</option>
-                  {TIME_OPTIONS.map((t) => (
-                    <option key={t} value={t}>{t}</option>
-                  ))}
-                </select>
+                  onChange={(e) => {
+                    const raw = e.target.value.replace(/\D/g, "").slice(0, 4);
+                    const formatted = raw.length >= 3 ? raw.slice(0, 2) + ":" + raw.slice(2) : raw;
+                    setNewLesson((r) => ({ ...r, time: formatted }));
+                  }}
+                  className="h-10 w-20 font-mono text-sm"
+                  maxLength={5}
+                />
               </div>
 
               {/* Student with autocomplete */}
