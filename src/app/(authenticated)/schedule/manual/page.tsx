@@ -329,7 +329,7 @@ export default function ScheduleManualEntryPage() {
             <CardTitle className="text-base">Add New Lesson</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-wrap items-end gap-3">
+            <div className="flex flex-wrap items-end gap-3 rounded-lg border border-dashed border-gray-300 p-3">
               {/* Time */}
               <div>
                 <Label className="mb-1 block text-xs">Time</Label>
@@ -408,8 +408,9 @@ export default function ScheduleManualEntryPage() {
               <Button
                 onClick={saveNewLesson}
                 disabled={!canSaveNew || addLessonMutation.isPending || importMutation.isPending}
+                className="ml-auto"
               >
-                <Plus className="mr-1 h-4 w-4" /> Add
+                {addLessonMutation.isPending ? "Saving..." : "Save"}
               </Button>
             </div>
           </CardContent>
