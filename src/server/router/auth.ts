@@ -9,15 +9,24 @@ export const authRouter = router({
   login: publicProcedure
     .input(z.object({ password: z.string().min(1) }))
     .mutation(async ({ input }) => {
+      const appPassword = process.env.APP_PASSWORD;
       const hash = process.env.ADMIN_PASSWORD_HASH;
-      if (!hash) {
+
+      if (!appPassword && !hash) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Password hash not configured",
+          message: "Password not configured",
         });
       }
 
-      const valid = await bcrypt.compare(input.password, hash);
+      // Support both plain APP_PASSWORD and hashed ADMIN_PASSWORD_HASH
+      let valid = false;
+      if (hash) {
+        valid = await bcrypt.compare(input.password, hash);
+      } else if (appPassword) {
+        valid = input.password === appPassword;
+      }
+
       if (!valid) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
