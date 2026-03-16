@@ -68,7 +68,7 @@ export default function ScheduleManualEntryPage() {
   );
 
   // Fetch schedule for selected date
-  const dateObj = useMemo(() => (date ? new Date(date + "T00:00:00") : null), [date]);
+  const dateObj = useMemo(() => (date ? new Date(date + "T12:00:00") : null), [date]);
   const scheduleQuery = trpc.schedule.getByDate.useQuery(
     { date: dateObj! },
     { enabled: !!dateObj },
@@ -110,7 +110,7 @@ export default function ScheduleManualEntryPage() {
     if (!currentScheduleId) {
       if (!classroom) return;
       const result = await importMutation.mutateAsync({
-        date: new Date(date + "T00:00:00"),
+        date: new Date(date + "T12:00:00"),
         teacherName,
         classroom,
         lessons: [],
