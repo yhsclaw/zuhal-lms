@@ -1,6 +1,2 @@
--- AlterTable
-ALTER TABLE "students" ADD COLUMN "firstLessonDate" DATE;
-ALTER TABLE "students" ADD COLUMN "instrument" TEXT;
-
--- AlterTable
-ALTER TABLE "lessons" ADD COLUMN "practiceNotes" TEXT;
+-- This migration is a no-op: fields were included in the initial migration.
+SELECT 1;
