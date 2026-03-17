@@ -122,6 +122,7 @@ export function OcrPreview({
                 className="h-10 rounded-md border border-gray-300 px-2 text-sm"
               >
                 <option value="">Duration</option>
+                <option value="15">15 min</option>
                 <option value="25">25 min</option>
                 <option value="45">45 min</option>
               </select>
