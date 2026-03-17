@@ -29,6 +29,12 @@ export default function ScheduleDetailPage() {
     },
   });
 
+  const deleteLesson = trpc.schedule.deleteLesson.useMutation({
+    onSuccess: () => {
+      utils.schedule.getById.invalidate({ id: params.id });
+    },
+  });
+
   const handleAttendanceChange = (lessonId: string, attendance: AttendanceStatus) => {
     setAttendance.mutate({ id: lessonId, attendance });
   };
@@ -84,6 +90,7 @@ export default function ScheduleDetailPage() {
           <ScheduleTable
             lessons={schedule.lessons}
             onAttendanceChange={handleAttendanceChange}
+            onDeleteLesson={(lessonId) => deleteLesson.mutate({ id: lessonId })}
           />
         </CardContent>
       </Card>
