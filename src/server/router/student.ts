@@ -90,6 +90,13 @@ export const studentRouter = router({
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      const lessonCount = await ctx.prisma.lesson.count({ where: { studentId: input.id } });
+      if (lessonCount > 0) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Bu öğrencinin ${lessonCount} ders kaydı var. Önce dersleri silin.`,
+        });
+      }
       await ctx.prisma.student.delete({ where: { id: input.id } });
       return { success: true };
     }),

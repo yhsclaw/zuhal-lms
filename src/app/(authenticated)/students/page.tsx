@@ -44,6 +44,7 @@ export default function StudentListPage() {
 
   const deleteMutation = trpc.student.delete.useMutation({
     onSuccess: () => { utils.student.list.invalidate(); },
+    onError: (err) => { alert(err.message); },
   });
 
   const handleCreate = (e: React.FormEvent) => {
