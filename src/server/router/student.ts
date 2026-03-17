@@ -87,6 +87,13 @@ export const studentRouter = router({
       return ctx.prisma.student.update({ where: { id }, data });
     }),
 
+  delete: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.student.delete({ where: { id: input.id } });
+      return { success: true };
+    }),
+
   merge: protectedProcedure
     .input(
       z.object({
