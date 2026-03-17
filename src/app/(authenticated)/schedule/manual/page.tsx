@@ -267,6 +267,7 @@ export default function ScheduleManualEntryPage() {
                     className="h-10 rounded-md border border-gray-300 bg-white px-2 text-sm"
                   >
                     <option value="">Duration</option>
+                    <option value="15">15 min</option>
                     <option value="25">25 min</option>
                     <option value="45">45 min</option>
                   </select>
@@ -388,6 +389,7 @@ export default function ScheduleManualEntryPage() {
                   className="h-10 rounded-md border border-gray-300 bg-white px-2 text-sm"
                 >
                   <option value="">None</option>
+                  <option value="15">15 min</option>
                   <option value="25">25 min</option>
                   <option value="45">45 min</option>
                 </select>

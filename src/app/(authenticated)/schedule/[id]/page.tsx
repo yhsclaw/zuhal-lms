@@ -117,6 +117,7 @@ export default function ScheduleDetailPage() {
                   className="h-9 rounded-md border border-gray-300 bg-white px-2 text-sm"
                 >
                   <option value="">No duration</option>
+                  <option value="15">15 min</option>
                   <option value="25">25 min</option>
                   <option value="45">45 min</option>
                 </select>
@@ -174,6 +175,7 @@ export default function ScheduleDetailPage() {
               className="h-9 rounded-md border border-gray-300 bg-white px-2 text-sm"
             >
               <option value="">No duration</option>
+              <option value="15">15 min</option>
               <option value="25">25 min</option>
               <option value="45">45 min</option>
             </select>

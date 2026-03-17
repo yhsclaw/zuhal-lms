@@ -18,8 +18,46 @@ export const studentRouter = router({
             orderBy: { createdAt: "desc" },
             take: 5,
           },
+          _count: { select: { lessons: true } },
         },
         orderBy: { name: "asc" },
+      }).then(async (students) => {
+        // Fetch last D52 chapter for each student
+        const studentIds = students.map((s) => s.id);
+        const lastChapters = await ctx.prisma.lessonChapter.findMany({
+          where: { lesson: { studentId: { in: studentIds } } },
+          orderBy: { lesson: { createdAt: "desc" } },
+          include: { chapter: true },
+          distinct: ["lessonId"],
+        });
+
+        // Group by studentId via lesson relation — need a second query for mapping
+        const chaptersByStudent = new Map<string, { number: number; title: string }>();
+        // Get lesson->student mapping for these chapters
+        const lessonIds = [...new Set(lastChapters.map((lc) => lc.lessonId))];
+        const lessonStudentMap = await ctx.prisma.lesson.findMany({
+          where: { id: { in: lessonIds } },
+          select: { id: true, studentId: true, createdAt: true },
+        });
+        const lessonToStudent = new Map(lessonStudentMap.map((l) => [l.id, { studentId: l.studentId, createdAt: l.createdAt }]));
+
+        for (const lc of lastChapters) {
+          const lessonInfo = lessonToStudent.get(lc.lessonId);
+          if (!lessonInfo) continue;
+          const existing = chaptersByStudent.get(lessonInfo.studentId);
+          // Keep the highest chapter number from the most recent lessons
+          if (!existing || lc.chapterNumber > existing.number) {
+            chaptersByStudent.set(lessonInfo.studentId, {
+              number: lc.chapterNumber,
+              title: lc.chapter.title,
+            });
+          }
+        }
+
+        return students.map((s) => ({
+          ...s,
+          lastChapter: chaptersByStudent.get(s.id) ?? null,
+        }));
       });
     }),
 

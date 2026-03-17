@@ -41,7 +41,7 @@ export const lessonRouter = router({
     .input(
       z.object({
         id: z.string(),
-        durationMin: z.number().refine((v) => v === 25 || v === 45),
+        durationMin: z.number().refine((v) => v === 15 || v === 25 || v === 45),
       }),
     )
     .mutation(async ({ ctx, input }) => {

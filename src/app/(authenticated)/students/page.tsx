@@ -179,6 +179,11 @@ export default function StudentListPage() {
                         </p>
                       </Link>
                       <div className="flex items-center gap-2">
+                        {(student as unknown as { lastChapter?: { number: number; title: string } | null }).lastChapter && (
+                          <Badge variant="outline" className="text-xs">
+                            Son: Bölüm {(student as unknown as { lastChapter: { number: number; title: string } }).lastChapter.number}
+                          </Badge>
+                        )}
                         {presentCount > 0 && <Badge variant="success">{presentCount} attended</Badge>}
                         <button onClick={() => startEdit(student as Parameters<typeof startEdit>[0])} className="rounded p-1 text-gray-400 hover:text-gray-700">
                           <Pencil className="h-4 w-4" />

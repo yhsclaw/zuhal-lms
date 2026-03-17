@@ -107,7 +107,7 @@ export default function LessonDetailPage() {
                 <div>
                   <p className="mb-1 text-xs font-medium text-gray-500">Duration</p>
                   <div className="flex gap-1">
-                    {[25, 45].map((d) => (
+                    {[15, 25, 45].map((d) => (
                       <button
                         key={d}
                         onClick={() => setDuration.mutate({ id: lesson.id, durationMin: d })}

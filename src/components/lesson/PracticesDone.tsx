@@ -55,7 +55,7 @@ export function PracticesDone({ lessonId, currentChapters, practiceNotes }: Prac
       <CardContent className="space-y-4">
         <div>
           <Label>D52 Chapters Practiced</Label>
-          <div className="mt-2 flex flex-wrap gap-2">
+          <div className="mt-2 flex flex-col gap-1">
             {allChapters?.map((chapter) => {
               const isSelected = selectedChapters.some(
                 (c) => c.chapterNumber === chapter.number,
