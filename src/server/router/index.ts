@@ -6,6 +6,7 @@ import { lessonRouter } from "./lesson";
 import { chapterRouter } from "./chapter";
 import { libraryRouter } from "./library";
 import { reportRouter } from "./report";
+import { songNotationRouter } from "./songNotation";
 
 export const appRouter = router({
   auth: authRouter,
@@ -15,6 +16,7 @@ export const appRouter = router({
   chapter: chapterRouter,
   library: libraryRouter,
   report: reportRouter,
+  songNotation: songNotationRouter,
 });
 
 export type AppRouter = typeof appRouter;

@@ -57,6 +57,145 @@ const chapters = [
   { number: 52, title: "Musicality & Personal Style", description: "Developing personal voice, listening skills, and musical taste." },
 ];
 
+const songNotations = [
+  {
+    title: "We Will Rock You - Queen",
+    difficulty: "BEGINNER" as const,
+    notation: `// We Will Rock You - Queen
+// Tempo: 81 BPM | 4/4
+// Seviye: Başlangıç
+
+// BD = Bass Drum, SD = Snare, HH = Hi-Hat
+// x = vuruş, - = sus, o = açık hi-hat
+
+// Ana Ritim (tekrarlayan pattern)
+//         1   &   2   &   3   &   4   &
+// SD  |   -   -   -   -   x   -   -   -   |
+// BD  |   x   -   x   -   -   -   -   -   |
+
+// Koro (cymbal eklenir)
+//         1   &   2   &   3   &   4   &
+// CR  |   x   -   -   -   -   -   -   -   |
+// SD  |   -   -   -   -   x   -   -   -   |
+// BD  |   x   -   x   -   -   -   -   -   |
+
+// Not: Stomp-stomp-clap pattern'i
+// Ayak-Ayak-El şeklinde çalınır
+`,
+  },
+  {
+    title: "Billie Jean - Michael Jackson",
+    difficulty: "BEGINNER" as const,
+    notation: `// Billie Jean - Michael Jackson
+// Tempo: 117 BPM | 4/4
+// Seviye: Başlangıç
+
+// HH = Hi-Hat, SD = Snare, BD = Bass Drum
+// x = vuruş, - = sus
+
+// Ana Groove
+//         1 e & a 2 e & a 3 e & a 4 e & a
+// HH  |   x - x - x - x - x - x - x - x - |
+// SD  |   - - - - x - - - - - - - x - - - |
+// BD  |   x - - - - - - - x - - - - - - - |
+
+// Koro
+//         1 e & a 2 e & a 3 e & a 4 e & a
+// HH  |   x - x - x - x - x - x - x - x - |
+// SD  |   - - - - x - - - - - - - x - - - |
+// BD  |   x - - - - - x - x - - - - - - - |
+`,
+  },
+  {
+    title: "Back in Black - AC/DC",
+    difficulty: "BEGINNER" as const,
+    notation: `// Back in Black - AC/DC
+// Tempo: 94 BPM | 4/4
+// Seviye: Başlangıç
+
+// HH = Hi-Hat, SD = Snare, BD = Bass Drum
+// x = vuruş, o = açık hi-hat, - = sus
+
+// İntro (hi-hat count)
+//         1   &   2   &   3   &   4   &
+// HH  |   x   -   x   -   x   -   x   -   |
+
+// Ana Beat
+//         1   &   2   &   3   &   4   &
+// HH  |   x   -   x   -   x   -   x   -   |
+// SD  |   -   -   -   -   x   -   -   -   |
+// BD  |   x   -   -   -   -   -   x   -   |
+
+// Koro
+//         1   &   2   &   3   &   4   &
+// CR  |   x   -   -   -   -   -   -   -   |
+// HH  |   -   -   x   -   x   -   x   -   |
+// SD  |   -   -   -   -   x   -   -   -   |
+// BD  |   x   -   -   -   -   -   x   x   |
+`,
+  },
+  {
+    title: "Tom Sawyer - Rush",
+    difficulty: "ADVANCED" as const,
+    notation: `// Tom Sawyer - Rush
+// Tempo: 88 BPM | 7/8 → 4/4 değişimli
+// Seviye: İleri
+
+// HH = Hi-Hat, SD = Snare, BD = Bass Drum
+// RD = Ride, CR = Crash, T1 = Tom 1, T2 = Tom 2, FT = Floor Tom
+// x = vuruş, o = açık, g = ghost note, - = sus
+
+// İntro (7/8)
+//         1 e & a 2 e & a 3 e &
+// RD  |   x - x - x - x - x - x - x - |
+// SD  |   - - - - x - - - - - g - x - |
+// BD  |   x - - - - - x - - - - - - - |
+
+// Ana Groove (4/4)
+//         1 e & a 2 e & a 3 e & a 4 e & a
+// HH  |   x - x - x - x - x - x - x - x - |
+// SD  |   - - - - x - - g - - g - x - - - |
+// BD  |   x - - x - - x - - - x - - - x - |
+
+// Fill 1
+//         1 e & a 2 e & a 3 e & a 4 e & a
+// T1  |   x - x - - - - - - - - - - - - - |
+// T2  |   - - - - x - x - - - - - - - - - |
+// FT  |   - - - - - - - - x - x - x x x x |
+// BD  |   x - - - - - - - - - - - - - - - |
+`,
+  },
+  {
+    title: "Toxicity - System of a Down",
+    difficulty: "ADVANCED" as const,
+    notation: `// Toxicity - System of a Down
+// Tempo: 78/164 BPM (yarı zaman / tam zaman) | 4/4
+// Seviye: İleri
+
+// HH = Hi-Hat, SD = Snare, BD = Bass Drum, CH = China
+// x = vuruş, o = açık, g = ghost note, - = sus
+
+// İntro Pattern
+//         1 e & a 2 e & a 3 e & a 4 e & a
+// HH  |   x - x - x - x - x - x - x - x - |
+// SD  |   - - - - x - - - - - - - x - - - |
+// BD  |   x - x - - - - - x - - - - - x - |
+
+// Koro (hızlı bölüm - double time)
+//         1 e & a 2 e & a 3 e & a 4 e & a
+// CH  |   x - x - x - x - x - x - x - x - |
+// SD  |   - - - - x - - - - - - - x - - - |
+// BD  |   x x - x - - x - x x - x - - x - |
+
+// Köprü (6/8 hissi)
+//         1   2   3   4   5   6
+// RD  |   x   -   x   x   -   x   |
+// SD  |   -   -   x   -   -   x   |
+// BD  |   x   -   -   x   -   -   |
+`,
+  },
+];
+
 async function main() {
   console.log("Seeding D52 chapters...");
 
@@ -69,6 +208,19 @@ async function main() {
   }
 
   console.log(`Seeded ${chapters.length} chapters.`);
+
+  console.log("Seeding song notations...");
+
+  for (const song of songNotations) {
+    const existing = await prisma.songNotation.findFirst({
+      where: { title: song.title },
+    });
+    if (!existing) {
+      await prisma.songNotation.create({ data: song });
+    }
+  }
+
+  console.log(`Seeded ${songNotations.length} song notations.`);
 }
 
 main()

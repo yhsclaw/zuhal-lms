@@ -14,6 +14,7 @@ import {
   X,
   Home,
   LogOut,
+  Music,
 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 
@@ -23,6 +24,7 @@ const navItems = [
   { href: "/students", label: "Students", icon: Users },
   { href: "/library", label: "Library", icon: BookOpen },
   { href: "/reports", label: "Reports", icon: BarChart3 },
+  { href: "/song-notation", label: "Şarkı Notasyonu", icon: Music },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {

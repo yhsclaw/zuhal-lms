@@ -83,6 +83,22 @@ model LessonChapter {
   @@map("lesson_chapters")
 }
 
+enum Difficulty {
+  BEGINNER
+  ADVANCED
+}
+
+model SongNotation {
+  id         String     @id @default(cuid())
+  title      String
+  notation   String
+  difficulty Difficulty @default(BEGINNER)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@map("song_notations")
+}
+
 model PdfExercise {
   id        String      @id @default(cuid())
   title     String
