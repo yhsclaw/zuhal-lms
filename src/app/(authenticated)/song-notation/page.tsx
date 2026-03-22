@@ -112,7 +112,7 @@ export default function SongNotationListPage() {
     setSongsterrLoading(true);
     try {
       const res = await fetch(
-        `https://www.songsterr.com/api/songs?pattern=${encodeURIComponent(query)}&size=10`
+        `/api/songsterr-search?pattern=${encodeURIComponent(query)}&size=10`
       );
       if (!res.ok) throw new Error("Songsterr API hatası");
       const data: SongsterrResult[] = await res.json();
