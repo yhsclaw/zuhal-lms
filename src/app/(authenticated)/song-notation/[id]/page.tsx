@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { trpc } from "@/lib/trpc";
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -9,17 +9,27 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Edit3, Save, X } from "lucide-react";
+import {
+  ArrowLeft,
+  Edit3,
+  Save,
+  X,
+  ZoomIn,
+  ZoomOut,
+  Globe,
+} from "lucide-react";
 
 type Difficulty = "BEGINNER" | "ADVANCED";
 
 export default function SongNotationDetailPage() {
   const params = useParams<{ id: string }>();
-  const router = useRouter();
   const [editing, setEditing] = useState(false);
   const [editTitle, setEditTitle] = useState("");
   const [editNotation, setEditNotation] = useState("");
   const [editDifficulty, setEditDifficulty] = useState<Difficulty>("BEGINNER");
+  const [svgZoom, setSvgZoom] = useState(100);
+  const [textOverlay, setTextOverlay] = useState("");
+  const [showOverlayInput, setShowOverlayInput] = useState(false);
 
   const utils = trpc.useUtils();
   const { data: notation, isLoading } = trpc.songNotation.getById.useQuery({
@@ -58,6 +68,18 @@ export default function SongNotationDetailPage() {
     }
     setEditing(false);
   };
+
+  const parsedSvgs: string[] = notation?.svgData
+    ? (() => {
+        try {
+          return JSON.parse(notation.svgData);
+        } catch {
+          return [];
+        }
+      })()
+    : [];
+
+  const hasSvg = parsedSvgs.length > 0;
 
   if (isLoading) {
     return (
@@ -137,7 +159,10 @@ export default function SongNotationDetailPage() {
               </div>
             ) : (
               <>
-                <CardTitle>{notation.title}</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  {hasSvg && <Globe className="h-5 w-5 text-blue-600" />}
+                  {notation.title}
+                </CardTitle>
                 <Badge
                   variant={
                     notation.difficulty === "BEGINNER"
@@ -147,11 +172,94 @@ export default function SongNotationDetailPage() {
                 >
                   {notation.difficulty === "BEGINNER" ? "Başlangıç" : "İleri"}
                 </Badge>
+                {notation.songsterrSongId && (
+                  <Badge variant="outline" className="text-blue-600">
+                    Songsterr
+                  </Badge>
+                )}
               </>
             )}
           </div>
         </CardHeader>
         <CardContent>
+          {/* SVG Notation Display */}
+          {hasSvg && !editing && (
+            <div className="mb-4">
+              <div className="mb-3 flex items-center justify-between">
+                <p className="text-sm font-medium text-gray-700">
+                  Davul Notasyonu ({parsedSvgs.length} sayfa)
+                </p>
+                <div className="flex items-center gap-2">
+                  {!showOverlayInput && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowOverlayInput(true)}
+                    >
+                      Not Ekle
+                    </Button>
+                  )}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSvgZoom((z) => Math.max(25, z - 25))}
+                  >
+                    <ZoomOut className="h-3 w-3" />
+                  </Button>
+                  <span className="text-xs text-gray-500">{svgZoom}%</span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSvgZoom((z) => Math.min(200, z + 25))}
+                  >
+                    <ZoomIn className="h-3 w-3" />
+                  </Button>
+                </div>
+              </div>
+
+              {showOverlayInput && (
+                <div className="mb-3 flex gap-2">
+                  <Input
+                    value={textOverlay}
+                    onChange={(e) => setTextOverlay(e.target.value)}
+                    placeholder="Not yazın (notasyonun üstünde görünecek)..."
+                    className="flex-1"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setShowOverlayInput(false);
+                      setTextOverlay("");
+                    }}
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </div>
+              )}
+
+              <div className="space-y-2 overflow-x-auto rounded-md border bg-white p-4">
+                {textOverlay && (
+                  <div className="mb-2 rounded bg-yellow-50 p-2 text-sm font-medium text-yellow-800">
+                    {textOverlay}
+                  </div>
+                )}
+                {parsedSvgs.map((svg: string, i: number) => (
+                  <div
+                    key={i}
+                    className="svg-notation-page overflow-x-auto"
+                    style={{
+                      transform: `scale(${svgZoom / 100})`,
+                      transformOrigin: "top left",
+                    }}
+                    dangerouslySetInnerHTML={{ __html: svg }}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Text Notation */}
           {editing ? (
             <textarea
               value={editNotation}

@@ -62,27 +62,35 @@ export const songNotationRouter = router({
         title: z.string().min(1),
         notation: z.string().min(1),
         difficulty: z.enum(["BEGINNER", "ADVANCED"]).default("BEGINNER"),
+        songsterrSongId: z.number().int().optional().nullable(),
+        songsterrTrackIndex: z.number().int().optional().nullable(),
+        svgData: z.string().optional().nullable(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const data = {
+        title: input.title,
+        notation: input.notation,
+        difficulty: input.difficulty,
+        ...(input.songsterrSongId !== undefined && {
+          songsterrSongId: input.songsterrSongId ?? null,
+        }),
+        ...(input.songsterrTrackIndex !== undefined && {
+          songsterrTrackIndex: input.songsterrTrackIndex ?? null,
+        }),
+        ...(input.svgData !== undefined && {
+          svgData: input.svgData ?? null,
+        }),
+      };
+
       if (input.id) {
         return ctx.prisma.songNotation.update({
           where: { id: input.id },
-          data: {
-            title: input.title,
-            notation: input.notation,
-            difficulty: input.difficulty,
-          },
+          data,
         });
       }
 
-      return ctx.prisma.songNotation.create({
-        data: {
-          title: input.title,
-          notation: input.notation,
-          difficulty: input.difficulty,
-        },
-      });
+      return ctx.prisma.songNotation.create({ data });
     }),
 
   delete: protectedProcedure

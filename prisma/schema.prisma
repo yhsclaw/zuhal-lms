@@ -89,12 +89,15 @@ enum Difficulty {
 }
 
 model SongNotation {
-  id         String     @id @default(cuid())
-  title      String
-  notation   String
-  difficulty Difficulty @default(BEGINNER)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id                   String     @id @default(cuid())
+  title                String
+  notation             String
+  difficulty           Difficulty @default(BEGINNER)
+  songsterrSongId      Int?
+  songsterrTrackIndex  Int?
+  svgData              String?
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
 
   @@map("song_notations")
 }
